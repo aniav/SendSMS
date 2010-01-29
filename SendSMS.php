@@ -8,6 +8,7 @@
  */
 class SendSMS
 {
+	const SERVER = "http://sms1.cardboardfish.com:9001/HTTPSMS";
 	protected $sDestAddr;
 	protected $sSourceAddr;
 	protected $sSourceAddrTon;
@@ -24,6 +25,7 @@ class SendSMS
 	protected $sErrCode;
 	private $sUsername;
 	private $sPassword;
+	
 
 	/**
 	 * Base directory where the language directories can be found.
@@ -533,7 +535,7 @@ class SendSMS
 			$sMsg = urlencode($this->sMessage);
 		}
 
-		$sRequest = "http://sms1.cardboardfish.com:9001/HTTPSMS?S={$sSystemtype}&UN=${sUsername}&P=${sPassword}&DA={$this->sDestAddr}&SA={$this->sSourceAddr}&M=${sMsg}";
+		$sRequest = SendSMS::SERVER."?S={$sSystemtype}&UN=${sUsername}&P=${sPassword}&DA={$this->sDestAddr}&SA={$this->sSourceAddr}&M=${sMsg}";
 		if (!$this->sSourceAddrTon)
 		{
 			preg_match("/\w/", $this->sSourceAddr, $aMatches);
