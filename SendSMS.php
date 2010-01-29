@@ -64,8 +64,9 @@ class SendSMS
 		if ($psDestAddr == "")
 		{
 			$this->sDestAddr = "";
-			return true;
+			return;
 		}
+		
 		$paDests = explode(",", $psDestAddr);
 		$aDests = array();
 		foreach ($paDests as $psDest)
@@ -93,8 +94,9 @@ class SendSMS
 		if ($psSourceAddr == "")
 		{
 			$this->sSourceAddr = "";
+			return;
 		}
-
+		
 		preg_match("/^(\d{1,16}|.{1,11})$/", $psSourceAddr, $aMatches);
 		if ($aMatches[1] != "")
 		{
@@ -123,19 +125,18 @@ class SendSMS
 		if ($psSourceAddrTon == "")
 		{
 			$this->sSourceAddrTon = "";
+			return;
+		}
+		
+		preg_match("/^[105]$/", $psSourceAddrTon, $aMatches);
+		if ($aMatches[0] != "")
+		{
+			$this->sSourceAddrTon = $psSourceAddrTon;
 		}
 		else
 		{
-			preg_match("/^[105]$/", $psSourceAddrTon, $aMatches);
-			if ($aMatches[0] != "")
-			{
-				$this->sSourceAddrTon = $psSourceAddrTon;
-			}
-			else
-			{
-				$this->sErrstr = "Source type of number must be 1, 0 or 5.";
-				throw new Exception($this->sErrstr);
-			}
+			$this->sErrstr = "Source type of number must be 1, 0 or 5.";
+			throw new Exception($this->sErrstr);
 		}
 	}
 
@@ -149,19 +150,18 @@ class SendSMS
 		if ($psDataCodingScheme == "")
 		{
 			$this->sDataCodingScheme = "";
+			return;
+		}
+		
+		preg_match("/^[0124567]$/", $psDataCodingScheme, $aMatches);
+		if ($aMatches[0] != "")
+		{
+			$this->sDataCodingScheme = $psDataCodingScheme;
 		}
 		else
 		{
-			preg_match("/^[0124567]$/", $psDataCodingScheme, $aMatches);
-			if ($aMatches[0] != "")
-			{
-				$this->sDataCodingScheme = $psDataCodingScheme;
-			}
-			else
-			{
-				$this->sErrstr = "Data coding scheme must be one of:\n\t0 - Flash\n\t1 - Normal (default)\n\t2 - Binary\n\t4 - UCS2\n\t5 - Flash UCS2\n\t6 - Flash GSM\n\t7 - Normal GSM\n";
-				throw new Exception($this->sErrstr);
-			}
+			$this->sErrstr = "Data coding scheme must be one of:\n\t0 - Flash\n\t1 - Normal (default)\n\t2 - Binary\n\t4 - UCS2\n\t5 - Flash UCS2\n\t6 - Flash GSM\n\t7 - Normal GSM\n";
+			throw new Exception($this->sErrstr);
 		}
 	}
 
@@ -173,19 +173,18 @@ class SendSMS
 		if ($psDeliveryRecipient == "")
 		{
 			$this->sDeliveryRecipient = "";
+			return;
+		}
+		
+		preg_match("/^[012]$/", $psDeliveryRecipient, $aMatches);
+		if ($aMatches[0] != "")
+		{
+			$this->sDeliveryRecipient = $psDeliveryRecipient;
 		}
 		else
 		{
-			preg_match("/^[012]$/", $psDeliveryRecipient, $aMatches);
-			if ($aMatches[0] != "")
-			{
-				$this->sDeliveryRecipient = $psDeliveryRecipient;
-			}
-			else
-			{
-				$this->sErrstr = "Delivery receipt request must be 0, 1 or 2.";
-				throw new Exception($this->sErrstr);
-			}
+			$this->sErrstr = "Delivery receipt request must be 0, 1 or 2.";
+			throw new Exception($this->sErrstr);
 		}
 	}
 
@@ -197,19 +196,18 @@ class SendSMS
 		if ($psUserDataHeader == "")
 		{
 			$this->sUserDataHeader = "";
+			return;
+		}
+		
+		preg_match("/^[0-9a-fA-F]{1,17}$/", $psUserDataHeader, $aMatches);
+		if ($aMatches[0] != "")
+		{
+			$this->sUserDataHeader = $psUserDataHeader;
 		}
 		else
 		{
-			preg_match("/^[0-9a-fA-F]{1,17}$/", $psUserDataHeader, $aMatches);
-			if ($aMatches[0] != "")
-			{
-				$this->sUserDataHeader = $psUserDataHeader;
-			}
-			else
-			{
-				$this->sErrstr = "User header data invalid.";
-				throw new Exception($this->sErrstr);
-			}
+			$this->sErrstr = "User header data invalid.";
+			throw new Exception($this->sErrstr);
 		}
 	}
 
@@ -221,19 +219,18 @@ class SendSMS
 		if ($psUserReference == "")
 		{
 			$this->sUserReference = "";
+			return;
+		}
+		
+		preg_match("/^\w{1,16}$/", $psUserReference, $aMatches);
+		if ($aMatches[0] != "")
+		{
+			$this->sUserReference = $psUserReference;
 		}
 		else
 		{
-			preg_match("/^\w{1,16}$/", $psUserReference, $aMatches);
-			if ($aMatches[0] != "")
-			{
-				$this->sUserReference = $psUserReference;
-			}
-			else
-			{
-				$this->sErrstr = "User reference invalid. Must be 1-16 chars: " . $psUserReference;
-				throw new Exception($this->sErrstr);
-			}
+			$this->sErrstr = "User reference invalid. Must be 1-16 chars: " . $psUserReference;
+			throw new Exception($this->sErrstr);
 		}
 	}
 
@@ -245,19 +242,18 @@ class SendSMS
 		if ($psValidityPeriod == "")
 		{
 			$this->sValidityPeriod = "";
+			return;
+		}
+
+		preg_match("/^\d+$/", $psValidityPeriod, $aMatches);
+		if ($aMatches[0] != "" && $aMatches[0] > 0 && $aMatches[0] <= 10080)
+		{
+			$this->sValidityPeriod = $psValidityPeriod;
 		}
 		else
 		{
-			preg_match("/^\d+$/", $psValidityPeriod, $aMatches);
-			if ($aMatches[0] != "" && $aMatches[0] > 0 && $aMatches[0] <= 10080)
-			{
-				$this->sValidityPeriod = $psValidityPeriod;
-			}
-			else
-			{
-				$this->sErrstr = "Validity period must be a number between 0 and 10080.";
-				throw new Exception($this->sErrstr);
-			}
+			$this->sErrstr = "Validity period must be a number between 0 and 10080.";
+			throw new Exception($this->sErrstr);
 		}
 	}
 
@@ -269,19 +265,18 @@ class SendSMS
 		if ($psDelayUntil == "")
 		{
 			$this->sDelayUntil = "";
+			return;
+		}
+		
+		preg_match("/^\d{10}$/", $psDelayUntil, $aMatches);
+		if ($aMatches[0] != "") {
+			$this->sDelayUntil = $psDelayUntil;
+			$this->setLT("");
 		}
 		else
 		{
-			preg_match("/^\d{10}$/", $psDelayUntil, $aMatches);
-			if ($aMatches[0] != "") {
-				$this->sDelayUntil = $psDelayUntil;
-				$this->setLT("");
-			}
-			else
-			{
-				$this->sErrstr = "Delay Until must be a 10 digit UCS timestamp.";
-				throw new Exception($this->sErrstr);
-			}
+			$this->sErrstr = "Delay Until must be a 10 digit UCS timestamp.";
+			throw new Exception($this->sErrstr);
 		}
 	}
 
@@ -456,18 +451,15 @@ class SendSMS
 			$aBatchReplies = $this->sendSMSObject();
 			if (!$aBatchReplies)
 			{
-				if ($this->sErrCode == -15)
+				if ($this->sErrCode != -15)
 				{
-					$this->sErrCode = 0;
-					$aBatchReplies = array();
-					for ($i = 0; $i < count($aBatch); $i++)
-					{
-						array_push ($aBatchReplies, "-15");
-					}
+					return;
 				}
-				else
+				$this->sErrCode = 0;
+				$aBatchReplies = array();
+				for ($i = 0; $i < count($aBatch); $i++)
 				{
-					return false;
+					array_push ($aBatchReplies, "-15");
 				}
 			}
 			$aValFreq = array_count_values($aBatchReplies);
@@ -505,10 +497,8 @@ class SendSMS
 		{
 			return "";
 		}
-		else
-		{
-			return $sPrefix . $sExisting;
-		}
+		
+		return $sPrefix . $sExisting;
 	}
 
 	/**
@@ -560,54 +550,55 @@ class SendSMS
 			throw new Exception($this->sErrstr);
 		}
 		curl_setopt($oCurlHandler, CURLOPT_RETURNTRANSFER, TRUE);
-		$serverresponse = curl_exec($oCurlHandler);
+		$sServResponse = curl_exec($oCurlHandler);
 
-		if (!$serverresponse)
+		if (!$sServResponse)
 		{
-			$code = curl_getinfo($oCurlHandler, CURLINFO_HTTP_CODE);
-			$this->sErrstr = "HTTP error: $code\n";
+			$iCode = curl_getinfo($oCurlHandler, CURLINFO_HTTP_CODE);
+			$this->sErrstr = "HTTP error: $iCode\n";
 			throw new Exception($this->sErrstr);
 		}
 
-		preg_match("/(OK.*)\r$/", $serverresponse, $aMatches);
+		preg_match("/(OK.*)\r$/", $sServResponse, $aMatches);
 		if (!isset($aMatches[0]))
 		{
-			$code = curl_getinfo($oCurlHandler, CURLINFO_HTTP_CODE);
-			if ($code == 400)
+			$iCode = curl_getinfo($oCurlHandler, CURLINFO_HTTP_CODE);
+			switch($iCode) 
 			{
-				$this->sErrstr = "(Server) Bad request.";
-			}
-			else if ($code == 401)
-			{
-				$this->sErrstr = "(Server) Invalid username / password.";
-			}
-			else if ($code == 402)
-			{
-				$this->sErrstr = "(Server) Credit too low, payment required.";
-			}
-			else if ($code == 503)
-			{
-				$this->sErrCode = -15;
-				$this->sErrstr = "(Server) Destination not recognised.";
-			}
-			else if ($code == 500)
-			{
-				if ($this->bRetry)
-				{
-					try
+				case 400: 
+					$this->sErrstr = "(Server) Bad request.";
+					break;
+				case 401:
+					$this->sErrstr = "(Server) Invalid username / password.";
+					break;
+				case 402:
+					$this->sErrstr = "(Server) Credit too low, payment required.";
+					break;
+				case 503:
+					$this->sErrCode = -15;
+					$this->sErrstr = "(Server) Destination not recognised.";
+					break;					
+				case 500:
+					if ($this->bRetry)
 					{
-						$this->bRetry = false;
-						return new SendSMS($this);
+						try
+						{
+							$this->bRetry = false;
+							$oSMSObj = clone $this;
+							$oSMSObj->bRetry = true;
+							$oSMSObj->sErrstr = "";
+							return $oSMSObj;
+						}
+						catch (Exception $e)
+						{
+							$this->sErrstr = $e->getMessage();
+						}
 					}
-					catch (Exception $e)
+					else
 					{
 						$this->sErrstr = "(Server) Error, retry failed.";
 					}
-				}
-				else
-				{
-					$this->sErrstr = "(Server) Error, retry failed.";
-				}
+					break;
 			}
 			throw new Exception($this->sErrstr);
 		}
